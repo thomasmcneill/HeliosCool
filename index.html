@@ -40,19 +40,865 @@
                 </style>
                
                 <script>
-                var jsc_ObjectsDict=new Object;function jsc_AddObject(id){for(var result="",characters="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",charactersLength=characters.length,i=0;i<10;i++)result+=characters.charAt(Math.floor(Math.random()*charactersLength));return result="jsc_"+result,jsc_ObjectsDict[id]=result,result}function jsc_toggle_display_byID(id){var el=document.getElementById(id);if("none"===el.style.display)el.hasAttribute("jsc_oldstyle")?el.style.display=el.getAttribute("jsc_display_oldstyle"):el.style.display="block";else{var oldstyle=el.style.display;el.setAttribute("jsc_display_oldstyle",oldstyle),el.style.display="none"}}function jsc_hide_all_viewports(){for(var divsToHide=document.getElementsByClassName("jsc_viewport"),i=0;i<divsToHide.length;i++){var el=divsToHide[i],oldstyle=el.style.display;el.setAttribute("jsc_display_oldstyle",oldstyle),el.style.display="none"}}function jsc_hide_divbyID(id){var el=document.getElementById(id),oldstyle=el.style.display;el.setAttribute("jsc_display_oldstyle",oldstyle),el.style.display="none"}function jsc_show_divbyID(id){var el=document.getElementById(id);el.hasAttribute("jsc_oldstyle")?el.style.display=el.getAttribute("jsc_display_oldstyle"):el.style.display="block"}function jsc_getAllDescendents(id){var allDescendents=[],t=document.getElementById(id).childNodes;for(let i=0;i<t.length;i++)allDescendents.push(t[i]),t[i].hasChildNodes&&jsc_getAllDescendentsRecurse(t[i],allDescendents);return allDescendents}function jsc_getAllDescendentsRecurse(el,descendants){var children=el.childNodes;for(let i=0;i<children.length;i++)descendants.push(children[i]),children[i].hasChildNodes&&jsc_getAllDescendentsRecurse(children[i],descendants)}
+                var jsc_ObjectsDict = new Object();
 
-                class class_Gauge extends HTMLElement{connectedCallback(){var myHTML="\n\t\t\t\t<style>\n\t\t\t\t\t#jsc_id {\n\t\t\t\t\t\tfont-size: var(--h4-text-size);\n\t\t\t\t\t\tdisplay: inline-block;\n\t\t\t\t\t\tmargin: var(--control-margin);\n\t\t\t\t\t}\n\t\t\t\t</style>\n                                <canvas id='jsc_id' ></canvas>\n\t\t\t\t\n\t\t\t\n\t\t\t";this.jsc_id=jsc_AddObject(),myHTML=myHTML.replace(/jsc_id/g,this.jsc_id);var parentElementString='document.getElementById("'+this.getAttribute("id")+'")';myHTML=myHTML.replace(/jsc_parent/g,parentElementString),this.myCurrentValue=0,this.hasAttribute("value")&&(this.myCurrentValue=this.getAttribute("value")),this.myUpdateMS=1e3,this.hasAttribute("updatems")&&(this.myUpdateMS=this.getAttribute("updatems")),this.myName="",this.hasAttribute("name")&&(this.myName=this.getAttribute("name")),this.myBackColor="white",this.hasAttribute("backcolor")&&(this.myBackColor=this.getAttribute("backcolor")),this.myWidth=200,this.hasAttribute("width")&&(this.myWidth=this.getAttribute("width")),this.myHeight=this.myWidth,this.hasAttribute("height")&&(this.myHeight=this.getAttribute("height")),this.myWatch="",this.hasAttribute("watch")&&(this.myWatch=this.getAttribute("watch")),this.myMin=0,this.hasAttribute("min")&&(this.myMin=this.getAttribute("min")),this.myMax=255,this.hasAttribute("max")&&(this.myMax=this.getAttribute("max")),this.myGuage_Range=this.myMax-this.myMin,this.myLowZoneEnd=this.myMin,this.hasAttribute("lowzoneend")&&(this.myLowZoneEnd=this.getAttribute("lowzoneend")),this.myLowZoneColor="orange",this.hasAttribute("lowzonecolor")&&(this.myLowZoneColor=this.getAttribute("lowzonecolor")),this.myHighZoneStart=this.myMax,this.hasAttribute("highzonestart")&&(this.myHighZoneStart=this.getAttribute("highzonestart")),this.myHighZoneColor="red",this.hasAttribute("highzonecolor")&&(this.myHighZoneColor=this.getAttribute("highzonecolor")),this.myNormalColor="green",this.hasAttribute("normalcolor")&&(this.myNormalColor=this.getAttribute("normalcolor"),console.log(this.myNormalColor)),this.LowRange_ArcEnd=this.myLowZoneEnd/this.myGuage_Range*180,this.HighRange_ArcStart=this.myHighZoneStart/this.myGuage_Range*180,this.innerHTML=myHTML,this.drawGuage(),setInterval(function(){this.drawGuage()}.bind(this),this.myUpdateMS)}SetInternvalCallback(id){document.getElementById(id).setAttribute("value",window[this.getAttribute("watch")])}gauge_degreesToRadians(degrees){return degrees*(Math.PI/180)}gauge_radiansToDegrees(radians){return radians*(180/Math.PI)}gauge_drawPieSlice(ctx,centerX,centerY,radius,startAngle,endAngle,color){ctx.fillStyle=color,ctx.beginPath(),ctx.moveTo(centerX,centerY),ctx.arc(centerX,centerY,radius,this.gauge_degreesToRadians(startAngle),this.gauge_degreesToRadians(endAngle)),ctx.closePath(),ctx.fill()}drawGuage(){var canvas=document.getElementById(this.jsc_id),context=canvas.getContext("2d");context.canvas.width=this.myWidth,context.canvas.height=this.myHeight;var centerX=canvas.width/2,centerY=10+canvas.height/2,radius=canvas.height/2-10;context.fillStyle=this.myBackColor,context.fillRect(0,0,canvas.width,canvas.height),this.gauge_drawPieSlice(context,centerX,centerY,radius,180,360,this.myNormalColor),this.gauge_drawPieSlice(context,centerX,centerY,radius,180,180+this.LowRange_ArcEnd,this.myLowZoneColor),this.gauge_drawPieSlice(context,centerX,centerY,radius,180+this.HighRange_ArcStart,360,this.myHighZoneColor),context.beginPath(),context.moveTo(centerX,centerY),context.arc(centerX,centerY,.8*radius,1*Math.PI,2*Math.PI,!1),context.fillStyle=this.myBackColor,context.closePath(),context.fill(),context.fillStyle="black",context.font="14px Arial";var textWidth=context.measureText(this.myMin+" ").width;context.fillText(this.myMin,radius*(1-.8)+textWidth+10,centerY),context.fillStyle="black",context.font="14px Arial",textWidth=context.measureText(this.myMax+" ").width,context.fillText(this.myMax,canvas.width-radius*(1-.8)-textWidth-10,centerY),textWidth=context.measureText(this.myCurrentValue).width,context.fillText(this.myCurrentValue,canvas.width/2-textWidth/2,centerY+14),this.myCurrentValue=window[this.getAttribute("watch")];var ArcValue=this.myCurrentValue/this.myMax*180;this.gauge_drawPieSlice(context,centerX,centerY,radius,180+ArcValue,180+ArcValue+1,"black");var textHeight=0,fontSize=4,maxHeight=canvas.height/2-20,maxWidth=canvas.width-20;for(fontSize=4;fontSize<100;fontSize++){if(context.font=fontSize+"px Arial",textHeight=context.measureText(this.myName).height,textWidth=context.measureText(this.myName+" ").width,textHeight>maxHeight){fontSize--;break}if(textWidth>maxWidth){fontSize--;break}}context.font=fontSize+"px Arial",textWidth=context.measureText(this.myName).width,context.fillText(this.myName,canvas.width/2-textWidth/2,centerY+centerY/2)}}customElements.define("needle-gauge",class_Gauge);
+function jsc_AddObject(id) {
+   var result           = '';
+   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   var charactersLength = characters.length;
+   for ( var i = 0; i < 10; i++ ) {
+	  result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   result = 'jsc_' + result;
+   jsc_ObjectsDict[id] = result;
+   return result;
+}			
 
-                class class_BasicButton extends HTMLElement{connectedCallback(){var myHTML="\n\t\t\t\t<style>\n\t\t\t\t\t#jsc_id {\n\t\t\t\t\t\tfont-size: var(--h4-text-size);\n\t\t\t\t\t\tbackground-color: var(--control-bg-color);\n\n\t\t\t\t\t\tborder: none;\n\t\t\t\t\t\tcolor: white;\n\t\t\t\t\t\tpadding: 1.2ch 2ch;\n\t\t\t\t\t\ttext-align: center;\n\t\t\t\t\t\ttext-decoration: none;\n\t\t\t\t\t\tdisplay: inline-block;\n\t\t\t\t\t\tmargin: var(--control-margin);\n\n\t\t\t\t\t\tcursor: pointer;\n\t\t\t\t\t}\n\t\t\t\t</style>\n\t\t\t\t<button id='jsc_id' onclick='jsc_onclick'>jsc_text</button>\n\t\t\t\n\t\t\t";this.jsc_id=jsc_AddObject(),myHTML=(myHTML=(myHTML=myHTML.replace(/jsc_id/g,this.jsc_id)).replace(/jsc_text/g,this.getAttribute("text"))).replace(/jsc_onclick/g,this.getAttribute("myonclick"));var parentElementString="document.getElementById('"+this.getAttribute("id")+"')";myHTML=myHTML.replace(/jsc_parent/g,parentElementString),this.innerHTML=myHTML}get text(){return document.getElementById(this.jsc_id)}set text(val){document.getElementById(this.jsc_id).text=val}}customElements.define("basic-button",class_BasicButton);
+function jsc_toggle_display_byID(id)
+{
+   var el = document.getElementById(id);
+   if (el.style.display === "none") {
+      /* check to see if previous style was saved and restore it */
+      if(el.hasAttribute("jsc_oldstyle"))
+      {
+         el.style.display = el.getAttribute("jsc_display_oldstyle");
+      } else {
+         el.style.display = "block";
+      }
+   } else {
+      /* Save previous style.  It may not be block so that when he toggle it back it displays correctly. */
 
-                class class_DropDown extends HTMLElement{connectedCallback(){var myHTML='\n\t\t\t<style>\n\t\t\t\t.jsc_id {\n\t\t\t\t\tposition: relative;\n  \t\t\t\t\tdisplay: inline-block;\n\t\t\t\t\tmargin: var(--control-margin);\n\t\t\t\t}\n\t\t\t\t.jsc_id_button_class {\n\n\t\t\t\t\tborder: 2px solid var(--input-border-color);\n\t\t\t\t\tborder-radius: 4px;\n\t\t\t\t\t  \n\t\t\t\t\tbackground-color: var(--input-bg-color);\n\t\t\t\t\tpadding: 1.2ch 2ch 1.2ch 2ch;\n\t\t\t\t\tfont-size: var(--h4-text-size);\n\t\t\t\t\tcursor: pointer;\n\t\t\t\t}\n\t\t\t\t.jsc_id_dropdown {\n\t\t\t\t\tposition: relative;\n\t\t\t\t\tdisplay: inline-block;\n\t\t\t\t}\n\t\t\t\t.jsc_id_dropdown a:hover {\n\t\t\t\t\tbackground-color: var(--control-hover-color);\n\t\t\t\t}\n\n\t\t\t\t.jsc_id_dropdown_content {\n\t\t\t\t\tdisplay: none;\n\t\t\t\t\tposition: absolute;\n\t\t\t\t\tbackground-color: var(--control-bg-color);\n\t\t\t\t\tmin-width: 230px;\n\t\t\t\t\toverflow: auto;\n\t\t\t\t\tborder: 1px solid #ddd;\n\t\t\t\t\tz-index: 1;\n\t\t\t\t\tmax-height: 200px;\n    \t\t\t\toverflow: auto;\n\t\t\t\t}\n\t\t\t\t.jsc_id_dropdown_content a {\n\t\t\t\t\tcolor: black;\n\t\t\t\t\tpadding: 1ch 1ch;\n\t\t\t\t\ttext-decoration: none;\n\t\t\t\t\tdisplay: block;\n\t\t\t\t}\n\n\t\t\t\t#jsc_id_input {\n\t\t\t\t\tbox-sizing: border-box;\n\t\t\t\t\tbackground-image: url(\'searchicon.png\');\n\t\t\t\t\tbackground-position: 14px 12px;\n\t\t\t\t\tbackground-repeat: no-repeat;\n\t\t\t\t\tfont-size: 16px;\n\t\t\t\t\tpadding: 14px 20px 12px 45px;\n\t\t\t\t\tborder: none;\n\t\t\t\t\tborder-bottom: 1px solid #ddd;\n\t\t\t\t  }\n\t\t\t\t  .jsc_id_show {\n\t\t\t\t\t  display: block;\n\t\t\t\t\t}\n\t\t\t</style>\n\n\n\t\t\t<div class="jsc_id_dropdown">\n\t\t\t\t<button onclick="jsc_onshowfunc" id="jsc_id_button" class="jsc_id_button_class">jsc_text<i class="fa fa-angle-down"></i></button>\n\t\t\t\t<div id="jsc_id_div_dropdown" class="jsc_id_dropdown_content">\n\t\t\t\t\t\n\t\t\t\t</div>\n\t\t\t</div>\n\n\t\t\t';this.jsc_id=jsc_AddObject();var onshowfunc="document.getElementById('"+this.getAttribute("id")+"').showDrop()";this.myPlaceHolder="",this.hasAttribute("placeholder")&&(this.myPlaceHolder=this.getAttribute("placeholder")),this.mySelectedValue="",this.hasAttribute("selectedval")&&(this.mySelectedValue=this.getAttribute("selectedval"));var text="Select Value";this.myPlaceHolder.length>0&&(text=this.myPlaceHolder),this.mySelectedValue.length>0&&(text=this.mySelectedValue),myHTML=(myHTML=(myHTML=myHTML.replace(/jsc_text/g,text)).replace(/jsc_id/g,this.jsc_id)).replace(/jsc_onshowfunc/g,onshowfunc),this.innerHTML=myHTML,console.log("this.mySelectedValue="+this.mySelectedValue),this.myMenuItems=window[this.getAttribute("items")],myHTML=(myHTML='\t\t\t\t\t<input type="text" placeholder="Search.." id="jsc_id_input" onkeyup="'+("document.getElementById('"+this.getAttribute("id")+"').buildList()")+'">').replace(/jsc_id/g,this.jsc_id),document.getElementById(this.jsc_id+"_div_dropdown").innerHTML=myHTML,this.buildList()}showDrop(){document.getElementById(this.jsc_id+"_div_dropdown").classList.add(this.jsc_id+"_show")}selectValue(text){document.getElementById(this.jsc_id+"_div_dropdown").classList.remove(this.jsc_id+"_show"),document.getElementById(this.jsc_id+"_button").innerHTML=`${text}<i class="fa fa-angle-down">`,this.mySelectedValue=text}buildList(){var match="";"undefined"!=document.getElementById(this.jsc_id+"_input")&&null!=document.getElementById(this.jsc_id+"_input")&&(match=(match=document.getElementById(this.jsc_id+"_input").value).toUpperCase());var cntnt=document.getElementById(this.jsc_id+"_div_dropdown");const elements=document.getElementsByClassName(this.jsc_id+"_item");for(;elements.length>0;)elements[0].remove();var myHTML="";if(this.hasAttribute("items"))for(var outer=0;outer<this.myMenuItems.length;outer++){var text=this.myMenuItems[outer][0],dbid="",css="",func="";this.myMenuItems[outer].length>1&&(dbid=this.myMenuItems[outer][1]),this.myMenuItems[outer].length>2&&(css=this.myMenuItems[outer][2]),this.myMenuItems[outer].length>3&&(func=this.myMenuItems[outer][3]),(dbid="")&&(dbid=text),""==func&&(func=`document.getElementById('${this.getAttribute("id")}').selectValue('${text}')`),(text.toUpperCase().indexOf(match)>-1||0==match.length)&&(text==this.mySelectedValue&&(text+='<i class="fa fa-check"></i>'),myHTML+=`<a style="${css=this.jsc_id+"_item "+css}" dbid="${dbid}" onclick="${func}">${text}</a>`)}cntnt.innerHTML=myHTML}setValue(text){this.selectValue(text),document.getElementById(this.jsc_id+"_div_dropdown").classList.remove(this.jsc_id+"_show")}getValue(){return this.mySelectedValue}}customElements.define("drop-down",class_DropDown);
+      var oldstyle = el.style.display;
+      el.setAttribute("jsc_display_oldstyle",oldstyle);
+      el.style.display = "none";
+   }
+}
+function jsc_hide_all_viewports()
+{
+   var divsToHide = document.getElementsByClassName("jsc_viewport"); 
+   for(var i = 0; i < divsToHide.length; i++){
+      var el = divsToHide[i];
+      var oldstyle = el.style.display;
+      el.setAttribute("jsc_display_oldstyle",oldstyle);
+      el.style.display = "none";
+   }
+
+}
+function jsc_hide_divbyID(id)
+{
+   var el = document.getElementById(id);
+   var oldstyle = el.style.display;
+   el.setAttribute("jsc_display_oldstyle",oldstyle);
+   el.style.display = "none";
+}
+
+function jsc_show_divbyID(id)
+{
+   var el = document.getElementById(id);
+   /* check to see if previous style was saved and restore it */
+   if(el.hasAttribute("jsc_oldstyle"))
+   {
+      el.style.display = el.getAttribute("jsc_display_oldstyle");
+   } else {
+      el.style.display = "block";
+   }
+}
+
+
+function jsc_getAllDescendents(id)
+{
+   var allDescendents =  [];
+   var t = document.getElementById(id).childNodes;
+   for(let i = 0; i < t.length; i++) {
+      allDescendents.push(t[i]);
+      if(t[i].hasChildNodes)
+         jsc_getAllDescendentsRecurse(t[i], allDescendents);
+
+   }
+   return allDescendents;
+}
+function jsc_getAllDescendentsRecurse(el, descendants) {
+
+   var children = el.childNodes;
+   for(let i=0; i < children.length; i++) 
+   {
+      descendants.push(children[i]);
+      if(children[i].hasChildNodes)
+         jsc_getAllDescendentsRecurse(children[i],descendants);
+   }
+}
+
+ 
+class class_Gauge extends HTMLElement {
+	connectedCallback() {
+		var myHTML = `
+				<style>
+					#jsc_id {
+						font-size: var(--h4-text-size);
+						display: inline-block;
+						margin: var(--control-margin);
+					}
+				</style>
+                                <canvas id='jsc_id' ></canvas>
+				
+			
+			`;
+
+		this.jsc_id = jsc_AddObject();
+		
+		// update the id of the div in the control
+		myHTML =  myHTML.replace(/jsc_id/g,this.jsc_id);
+			
+
+		// update any function calls back
+		var parentElementString = 'document.getElementById("' + this.getAttribute('id') + '")';
+		myHTML =  myHTML.replace(/jsc_parent/g,parentElementString);
+
+                this.myCurrentValue = 0;
+                if(this.hasAttribute('value')) {
+			this.myCurrentValue = this.getAttribute('value');
+		}
+
+                this.myUpdateMS = 1000;
+		if(this.hasAttribute('updatems')) {
+			this.myUpdateMS = this.getAttribute('updatems');
+		}
+
+                this.myName = '';
+		if(this.hasAttribute('name')) {
+			this.myName = this.getAttribute('name');
+		}
+
+                this.myBackColor = 'white';
+		if(this.hasAttribute('backcolor')) {
+			this.myBackColor = this.getAttribute('backcolor');
+		}
+
+                this.myWidth = 200;
+		if(this.hasAttribute('width')) {
+			this.myWidth = this.getAttribute('width');
+		}
+
+                this.myHeight = this.myWidth;
+		if(this.hasAttribute('height')) {
+			this.myHeight = this.getAttribute('height');
+		}
+
+                this.myWatch = '';
+		if(this.hasAttribute('watch')) {
+			this.myWatch = this.getAttribute('watch');
+		}
+
+                this.myMin = 0;
+		if(this.hasAttribute('min')) {
+			this.myMin = this.getAttribute('min');
+		}
+                this.myMax = 255;
+		if(this.hasAttribute('max')) {
+			this.myMax = this.getAttribute('max');
+		}
+                this.myGuage_Range = this.myMax - this.myMin;
                 
-                class class_TextBox extends HTMLElement{connectedCallback(){var myHTML='\n\t\t\t<style>\n\t\t\t\t#jsc_id {\n\t\t\t\t  width: 100%;\n\t\t\t\t  box-sizing: border-box;\n\t\t\t\t  border: 2px solid var(--input-border-color);\n\t\t\t\t  border-radius: 4px;\n\t\t\t\t  font-size: var(--h4-text-size);\n\t\t\t\t  background-color: var(--input-bg-color);\n\t\t\t\t  padding: 1.2ch 2ch 1.2ch 2ch;\n\t\t\t\t  margin: var(--control-margin);\n\t\t\t\t}\n\t\t\t</style>\n\t\t\t<input type="text" id=\'jsc_id\' name="jsc_name" value="jsc_value" placeholder="jsc_placeholder">\n\t\t\t';this.jsc_id=jsc_AddObject(),console.log(this.jsc_id),myHTML=(myHTML=myHTML.replace(/jsc_id/g,this.jsc_id)).replace(/jsc_name/g,this.getAttribute("name")),myHTML=this.hasAttribute("value")?myHTML.replace(/jsc_value/g,this.getAttribute("value")):myHTML.replace(/jsc_value/g,""),this.hasAttribute("uuid")?this.uuid=!0:this.uuid=!1,myHTML=myHTML.replace(/jsc_placeholder/g,this.getAttribute("placeholder"));var parentElementString="document.getElementById('"+this.getAttribute("id")+"')";myHTML=myHTML.replace(/jsc_parent/g,parentElementString),this.innerHTML=myHTML}getValue(){return document.getElementById(this.jsc_id).value}setValue(text){document.getElementById(this.jsc_id).value=text}get text(){return document.getElementById(this.jsc_id).value}set text(value){document.getElementById(this.jsc_id).value=value}}customElements.define("text-box",class_TextBox);
+                this.myLowZoneEnd =this.myMin;
+		if(this.hasAttribute('lowzoneend')) {
+			this.myLowZoneEnd = this.getAttribute('lowzoneend');
+		}
+                this.myLowZoneColor = 'orange';
+		if(this.hasAttribute('lowzonecolor')) {
+			this.myLowZoneColor = this.getAttribute('lowzonecolor');
+		}
 
-                class class_SideBar extends HTMLElement{connectedCallback(){var myHTML='\n\t\t\t<style>\n\n\t\t\t\t.jsc_id_button_div {\n\t\t\t\t\twidth: var(--side-bar-closed-width);\n\t\t\t\t\tposition: absolute;\n\t\t\t\t\ttop: 0;\n\t\t\t\t\tleft: 0px;\n\t\t\t\t\tmargin: 0px;\n\t\t\t\t\tpadding: 0px;\n\t\t\t\t\theight: var(--title-bar-height);\n\t\t\t\t}\n\t\t\t\t.jsc_id_openbtn {\n\t\t\t\t\twidth: var(--side-bar-closed-width);\n\t\t\t\t\theight: 100%;\n\t\t\t\t\tfont-size: var(--h4-text-size);\n\t\t\t\t\tcursor: pointer;\n\t\t\t\t\tbackground-color: var(--control-bg-color);\n\t\t\t\t\tcolor: white;\n\t\t\t\t\tborder: none;\n\t\t\t\t\tmargin: 0px;\n\t\t\t\t\ttext-align: left;\n\t\t\t\t}\n\n\t\t\t\t.jsc_id_openbtn:hover {\n\t\t\t\t\tbackground-color: var(--control-hover-color);\n\t\t\t\t  }\n  \n\n\t\t\t\t.jsc_id_sidebar {\n\t\t\t\t\theight: 0%; \n\t\t\t\t\twidth: var(--side-bar-closed-width);\n\t\t\t\t\tposition: absolute; \n\t\t\t\t\tz-index: 1; /* on top */\n\t\t\t\t\ttop: 0;\n\t\t\t\t\tleft: 0;\n\t\t\t\t\tbackground-color: var(--control-bg-color);\n\t\t\t\t\toverflow-x: hidden; /* no scroll */\n\t\t\t\t\toverflow: hidden;\n\t\t\t\t\ttransition: 0.5s; \n\t\t\t\t}\n\t\t\t\t.jsc_id_sidebar a, a:visited {\n\t\t\t\t\tpadding: 8px 8px 8px 32px;\n\t\t\t\t\ttext-decoration: none;\n\t\t\t\t\tfont-size: var(--h4-text-size);\n\t\t\t\t\tcolor: var(--control-text-color);\n\t\t\t\t\tdisplay: block;\n\t\t\t\t\ttransition: 0.3s;\n\t\t\t\t}\n\n\t\t\t\t.jsc_id_sidebar a:hover {\n\t\t\t\t\tbackground-color: var(--control-hover-color);\n\t\t\t\t}\n  \n\n\t\t\t\t.jsc_id_closebtn  {\n\t\t\t\t\ttext-align: right;\n\n\t\t\t\t}\n\n\n\n\t\t\t\t/* smaller screens */\n\t\t\t\t@media screen and (max-height: 450px) {\n\t\t\t\t  .jsc_id_sidebar {padding-top: 15px;}\n\t\t\t\t  .jsc_id_sidebar a {font-size: 18px;}\n\t\t\t\t}\n\t\t\t</style>\n\t\t\t<div class="jsc_id_button_div">\n\t\t\t\t<button id="jsc_id_openbtn" class="jsc_id_openbtn" onclick="jsc_parent.open()"><i class="fas fa-bars"></i></button>\n\t\t\t</div>\n\t\t\t<div id="jsc_id" class="jsc_id_sidebar">\n\t\t\t</div>\n\t\t';this.jsc_id=jsc_AddObject(),myHTML=myHTML.replace(/jsc_id/g,this.jsc_id);var parentElementString="document.getElementById('"+this.getAttribute("id")+"')";myHTML=myHTML.replace(/jsc_parent/g,parentElementString),this.innerHTML=myHTML,this.myText="",this.hasAttribute("mytext")&&(this.myText=this.getAttribute("mytext"),document.getElementById(this.jsc_id+"_openbtn").innerHTML=this.myText),myHTML=document.getElementById(this.jsc_id).innerHTML,myHTML=(myHTML=(myHTML='<a href="javascript:void(0)" class="jsc_id_closebtn" onclick="jsc_parent.close()">&times;</a>').replace(/jsc_parent/g,parentElementString)).replace(/jsc_id/g,this.jsc_id),this.myMenuItems="";var closefunc="document.getElementById('"+this.getAttribute("id")+"').close()";if(this.hasAttribute("items")){this.myMenuItems=window[this.getAttribute("items")];for(var outer=0;outer<this.myMenuItems.length;outer++){var text=this.myMenuItems[outer][0];myHTML=myHTML+'<a href="#" class="'+this.myMenuItems[outer][1]+'" onclick="'+this.myMenuItems[outer][2]+"; "+closefunc+';"> '+text+"</a>"}}document.getElementById(this.jsc_id).innerHTML=myHTML}open(){document.getElementById(this.jsc_id).style.height="100%",document.getElementById(this.jsc_id).style.width="var(--side-bar-open-width)";for(var divsToHide=document.getElementsByClassName("jsc_viewport"),i=0;i<divsToHide.length;i++){divsToHide[i].style.marginLeft="250px"}}close(){document.getElementById(this.jsc_id).style.height="0",document.getElementById(this.jsc_id).style.width="var(-side-bar-closed-width)";for(var divsToHide=document.getElementsByClassName("jsc_viewport"),i=0;i<divsToHide.length;i++){divsToHide[i].style.marginLeft="0px"}}}customElements.define("side-bar",class_SideBar);
+                this.myHighZoneStart = this.myMax;
+		if(this.hasAttribute('highzonestart')) {
+			this.myHighZoneStart = this.getAttribute('highzonestart');
+		}
 
-                class class_TitleBar extends HTMLElement{connectedCallback(){var myHTML='\n\t\t\t<style>\n\n\t\t\t\t.jsc_id_div {\n\t\t\t\t\twidth: 100%;\n\t\t\t\t\tposition: absolute;\n\t\t\t\t\ttop: 0;\n\t\t\t\t\tleft: var(--side-bar-closed-width);\n\t\t\t\t\tmargin: 0px;\n\n\t\t\t\t\tfont-size: var(--h4-text-size);\n\t\t\t\t\theight: var(--title-bar-height);\n\t\t\t\t\tbackground-color: var(--control-bg-color);\n\t\t\t\t\tcolor: var(--control-text-color);\n\t\t\t\t\t\n\n\n\t\t\t\t}\n\n\n\t\t\t</style>\n\t\t\t<div class="jsc_id_div">jsc_text</div>\n\t\t';this.jsc_id=jsc_AddObject(),this.text=this.innerHTML,myHTML=myHTML.replace(/jsc_id/g,this.jsc_id);var parentElementString="document.getElementById('"+this.getAttribute("id")+"')";myHTML=myHTML.replace(/jsc_parent/g,parentElementString),this.innerHTML=myHTML,document.getElementById(this.getAttribute("id")).style.padding="20px;",document.getElementById(this.getAttribute("id")).style.margin="0px;",document.getElementById(this.getAttribute("id")).style.display=""}}customElements.define("title-bar",class_TitleBar);
+                this.myHighZoneColor = 'red';
+		if(this.hasAttribute('highzonecolor')) {
+			this.myHighZoneColor = this.getAttribute('highzonecolor');
+		}
+
+                this.myNormalColor = 'green';
+		if(this.hasAttribute('normalcolor')) {
+			this.myNormalColor = this.getAttribute('normalcolor');
+                        console.log(this.myNormalColor);
+		}
+
+                
+                this.LowRange_ArcEnd = 180 * (this.myLowZoneEnd/this.myGuage_Range);
+                this.HighRange_ArcStart = 180 * (this.myHighZoneStart/this.myGuage_Range);
+                
+                
+                
+
+		this.innerHTML = myHTML;
+                
+                this.drawGuage();
+                setInterval(function() { this.drawGuage(); }.bind(this), this.myUpdateMS);
+               
+               
+
+	}
+
+        SetInternvalCallback(id)
+        {
+                var ele = document.getElementById(id); 
+                
+                ele.setAttribute('value',window[this.getAttribute('watch')]);
+
+                
+        }
+        gauge_degreesToRadians(degrees) 
+        {
+               
+                return degrees * (Math.PI/180);   
+        }
+             
+        gauge_radiansToDegrees(radians) 
+        {
+                return radians * (180/Math.PI);
+        }
+        gauge_drawPieSlice(ctx,centerX, centerY, radius, startAngle, endAngle, color )
+        {
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(centerX,centerY);
+                ctx.arc(centerX, centerY, radius,this.gauge_degreesToRadians( startAngle),this.gauge_degreesToRadians(endAngle));
+                //console.log(this.gauge_radiansToDegrees( startAngle) + ':'+this.gauge_radiansToDegrees(endAngle));
+                ctx.closePath();
+                ctx.fill();
+        }
+        drawGuage()
+        {
+                var canvas = document.getElementById(this.jsc_id);
+                var margin = 10;
+
+                var context = canvas.getContext('2d');
+
+                context.canvas.width = this.myWidth;
+                context.canvas.height = this.myHeight;
+
+                var centerX = (canvas.width / 2);
+                var centerY =10 + canvas.height / 2;
+                var radius = (canvas.height / 2) - margin;
+                var shadedBandThickness = 0.80;
+        
+                context.fillStyle = this.myBackColor ;
+                context.fillRect(0, 0, canvas.width, canvas.height);
+        
+                //Draw Full Arc
+                this.gauge_drawPieSlice(context,centerX,centerY,radius,180,360,this.myNormalColor);
+                
+                //// Draw Low Range
+                this.gauge_drawPieSlice(context,centerX,centerY,radius,180,180+this.LowRange_ArcEnd ,this.myLowZoneColor);
+        
+                //// Draw high Range
+                this.gauge_drawPieSlice(context,centerX,centerY,radius,180+this.HighRange_ArcStart,360,this.myHighZoneColor);
+        
+                // Cut out center
+                context.beginPath();
+                context.moveTo(centerX,centerY);
+                context.arc(centerX, centerY,radius*shadedBandThickness , 1*Math.PI,  2*Math.PI, false);
+                context.fillStyle = this.myBackColor;
+                context.closePath();
+                context.fill();
+                
+                // Draw Min Text
+                context.fillStyle = 'black';
+                context.font = '14px Arial';
+                var textWidth = context.measureText(this.myMin+ ' ').width
+                context.fillText(this.myMin,  radius*(1-shadedBandThickness) + textWidth + margin, centerY);
+
+                // Draw max Value
+                context.fillStyle = 'black';
+                context.font = '14px Arial';
+                textWidth = context.measureText(this.myMax + ' ').width
+                context.fillText(this.myMax, canvas.width - radius*(1-shadedBandThickness) - textWidth - margin, centerY);
+
+                //Draw Max
+                textWidth = context.measureText(this.myCurrentValue).width;
+                context.fillText(this.myCurrentValue, (canvas.width/2) - (textWidth/2), centerY+14);
+                
+                // Draw Needle
+                this.myCurrentValue = window[this.getAttribute('watch')];
+                var ArcValue = (this.myCurrentValue / this.myMax) * 180;
+                this.gauge_drawPieSlice(context,centerX,centerY,radius,180+ArcValue,180+ArcValue+1,'black');
+
+
+
+                var textHeight = 0;
+                var fontSize = 4;
+                var maxHeight = (canvas.height / 2) - 2*margin;
+                var maxWidth = canvas.width - 2*margin;
+                for(fontSize = 4;fontSize < 100;fontSize++)
+                {
+                        context.font = fontSize + 'px Arial';
+                        textHeight = context.measureText(this.myName).height;
+                        textWidth = context.measureText(this.myName+' ').width
+                
+                        if(textHeight > maxHeight)
+                        {
+                                fontSize--;
+                                break;
+                        }        
+                        if(textWidth > maxWidth)
+                        {
+                                fontSize--;
+                                break;
+                        }        
+                        
+                }
+
+                context.font = fontSize + 'px Arial';
+                textWidth = context.measureText(this.myName).width;
+                context.fillText(this.myName, (canvas.width/2) -  (textWidth/2), centerY + (centerY/2));
+
+        }
+
+
+} 
+
+customElements.define('needle-gauge', class_Gauge);
+
+
+
+
+
+class class_BasicButton extends HTMLElement {
+	connectedCallback() {
+		var myHTML = `
+				<style>
+					#jsc_id {
+						font-size: var(--h4-text-size);
+						background-color: var(--control-bg-color);
+
+						border: none;
+						color: white;
+						padding: 1.2ch 2ch;
+						text-align: center;
+						text-decoration: none;
+						display: inline-block;
+						margin: var(--control-margin);
+
+						cursor: pointer;
+					}
+				</style>
+				<button id='jsc_id' onclick='jsc_onclick'>jsc_text</button>
+			
+			`;
+
+		this.jsc_id = jsc_AddObject();
+		
+		// update the id of the div in the control
+		myHTML =  myHTML.replace(/jsc_id/g,this.jsc_id);
+		// update the placeholder text in the control
+		myHTML =  myHTML.replace(/jsc_text/g,this.getAttribute('text'));
+		myHTML =  myHTML.replace(/jsc_onclick/g,this.getAttribute('myonclick'));
+			
+
+		// update any function calls back
+		var parentElementString = "document.getElementById('" + this.getAttribute('id') + "')";
+		myHTML =  myHTML.replace(/jsc_parent/g,parentElementString);
+
+		this.innerHTML = myHTML;
+
+	}
+	get text() {
+		return document.getElementById(this.jsc_id);
+	}
+	set text(val) 
+	{
+		document.getElementById(this.jsc_id).text=val;
+	}
+	
+
+
+}
+
+customElements.define('basic-button', class_BasicButton);
+
+
+
+class class_DropDown extends HTMLElement {
+	connectedCallback() {
+		var myHTML = `
+			<style>
+				.jsc_id {
+					position: relative;
+  					display: inline-block;
+					margin: var(--control-margin);
+				}
+				.jsc_id_button_class {
+
+					border: 2px solid var(--input-border-color);
+					border-radius: 4px;
+					  
+					background-color: var(--input-bg-color);
+					padding: 1.2ch 2ch 1.2ch 2ch;
+					font-size: var(--h4-text-size);
+					cursor: pointer;
+				}
+				.jsc_id_dropdown {
+					position: relative;
+					display: inline-block;
+				}
+				.jsc_id_dropdown a:hover {
+					background-color: var(--control-hover-color);
+				}
+
+				.jsc_id_dropdown_content {
+					display: none;
+					position: absolute;
+					background-color: var(--control-bg-color);
+					min-width: 230px;
+					overflow: auto;
+					border: 1px solid #ddd;
+					z-index: 1;
+					max-height: 200px;
+    				overflow: auto;
+				}
+				.jsc_id_dropdown_content a {
+					color: black;
+					padding: 1ch 1ch;
+					text-decoration: none;
+					display: block;
+				}
+
+				#jsc_id_input {
+					box-sizing: border-box;
+					background-image: url('searchicon.png');
+					background-position: 14px 12px;
+					background-repeat: no-repeat;
+					font-size: 16px;
+					padding: 14px 20px 12px 45px;
+					border: none;
+					border-bottom: 1px solid #ddd;
+				  }
+				  .jsc_id_show {
+					  display: block;
+					}
+			</style>
+
+
+			<div class="jsc_id_dropdown">
+				<button onclick="jsc_onshowfunc" id="jsc_id_button" class="jsc_id_button_class">jsc_text<i class="fa fa-angle-down"></i></button>
+				<div id="jsc_id_div_dropdown" class="jsc_id_dropdown_content">
+					
+				</div>
+			</div>
+
+			`;
+
+
+		this.jsc_id = jsc_AddObject();
+		
+		var onshowfunc = "document.getElementById('" + this.getAttribute('id') + "').showDrop()";
+
+
+		this.myPlaceHolder = "";
+		if(this.hasAttribute('placeholder')) {
+			this.myPlaceHolder = this.getAttribute('placeholder');
+		}
+
+		this.mySelectedValue="";
+		if(this.hasAttribute('selectedval')) {
+			this.mySelectedValue = this.getAttribute('selectedval');
+		}
+
+
+		// for getting column identenfier for database updates
+		//if(this.hasAttribute('uniquecolumn'))
+		//	this.uniqueColumn = this.getAttribute('uniquecolumn');
+		
+		var text = "Select Value";
+		if(this.myPlaceHolder.length > 0)
+			text=this.myPlaceHolder;
+		if(this.mySelectedValue.length > 0)
+			text=this.mySelectedValue;
+		
+		// update the id of the div in the control
+		myHTML =  myHTML.replace(/jsc_text/g,text);
+		myHTML =  myHTML.replace(/jsc_id/g,this.jsc_id);
+		myHTML =  myHTML.replace(/jsc_onshowfunc/g,onshowfunc);
+		this.innerHTML = myHTML;
+
+
+		console.log("this.mySelectedValue=" + this.mySelectedValue);
+		this.myMenuItems = window[this.getAttribute('items')];
+
+
+		var onkeyfunc = "document.getElementById('" + this.getAttribute('id') + "').buildList()";
+		var myHTML = `					<input type="text" placeholder="Search.." id="jsc_id_input" onkeyup="` + onkeyfunc + `">`;
+		myHTML =  myHTML.replace(/jsc_id/g,this.jsc_id);
+		document.getElementById(this.jsc_id + "_div_dropdown").innerHTML = myHTML;
+
+		this.buildList();
+
+
+
+
+	}
+
+	showDrop() {
+		document.getElementById(this.jsc_id + "_div_dropdown").classList.add(this.jsc_id + "_show");
+	}
+	selectValue(text) {
+		document.getElementById(this.jsc_id + "_div_dropdown").classList.remove(this.jsc_id + "_show");
+		document.getElementById(this.jsc_id + "_button").innerHTML = `${text}<i class="fa fa-angle-down">`;
+		this.mySelectedValue=text;
+
+	}
+	buildList() {
+
+		var match = "";
+		if (document.getElementById(this.jsc_id + "_input") != 'undefined' && document.getElementById(this.jsc_id + "_input") != null)
+		{
+			match = document.getElementById(this.jsc_id + "_input").value;
+			match = match.toUpperCase();
+		}
+
+
+		// get drop down element
+		var cntnt = document.getElementById(this.jsc_id + "_div_dropdown");
+
+		// remove existing elements from dropdown
+		const elements = document.getElementsByClassName(this.jsc_id + "_item");
+		while (elements.length > 0) elements[0].remove();
+
+
+		var myHTML = '';
+
+		if(this.hasAttribute('items'))
+		{
+			
+			for(var outer=0;outer<this.myMenuItems.length;outer++) {
+				var text = this.myMenuItems[outer][0];
+				var dbid = '';
+				var css = '';
+				var func = '';
+				if(this.myMenuItems[outer].length > 1)
+					dbid = this.myMenuItems[outer][1];
+
+				if(this.myMenuItems[outer].length > 2)
+					css =  this.myMenuItems[outer][2];
+
+				if(this.myMenuItems[outer].length > 3)
+					func = this.myMenuItems[outer][3];
+
+				if(dbid='')
+				{
+					dbid=text;
+				}
+				if(func=='')
+				{
+					func = `document.getElementById('${this.getAttribute('id')}').selectValue('${text}')`;
+				}
+				if(text.toUpperCase().indexOf(match) > -1 || match.length == 0) {
+					
+					//var node = document.createElement("A");
+					if(text == this.mySelectedValue)
+					text = text + `<i class="fa fa-check"></i>`;
+					css = this.jsc_id + "_item" + " " + css;
+					myHTML+= `<a style="${css}" dbid="${dbid}" onclick="${func}">${text}</a>`;
+
+				}
+			}
+		}
+		cntnt.innerHTML = myHTML;
+
+
+	}
+	setValue(text)
+	{
+		this.selectValue(text);
+		document.getElementById(this.jsc_id + "_div_dropdown").classList.remove(this.jsc_id + "_show");
+
+	}
+	getValue()
+	{
+		return this.mySelectedValue;
+	}
+
+
+}
+customElements.define('drop-down', class_DropDown);
+
+               
+class class_TextBox extends HTMLElement {
+	connectedCallback() {
+		var myHTML = `
+			<style>
+				#jsc_id {
+				  width: 100%;
+				  box-sizing: border-box;
+				  border: 2px solid var(--input-border-color);
+				  border-radius: 4px;
+				  font-size: var(--h4-text-size);
+				  background-color: var(--input-bg-color);
+				  padding: 1.2ch 2ch 1.2ch 2ch;
+				  margin: var(--control-margin);
+				}
+			</style>
+			<input type="text" id='jsc_id' name="jsc_name" value="jsc_value" placeholder="jsc_placeholder">
+			`;
+                        
+		this.jsc_id = jsc_AddObject();
+		console.log(this.jsc_id);
+
+
+		// update the id of the div in the control
+		myHTML =  myHTML.replace(/jsc_id/g,this.jsc_id);
+		// update the name in the control
+		myHTML =  myHTML.replace(/jsc_name/g,this.getAttribute('name'));
+
+		// update the value in the control
+		if(this.hasAttribute('value'))
+			myHTML =  myHTML.replace(/jsc_value/g,this.getAttribute('value'));
+		else
+			myHTML =  myHTML.replace(/jsc_value/g,'');
+
+		if(this.hasAttribute('uuid'))
+				this.uuid = true;
+		else
+				this.uuid = false;
+
+		// update the placeholder text in the control
+		myHTML =  myHTML.replace(/jsc_placeholder/g,this.getAttribute('placeholder'));
+		
+
+		// update any function calls back to this using parent
+		var parentElementString = "document.getElementById('" + this.getAttribute('id') + "')";
+		myHTML =  myHTML.replace(/jsc_parent/g,parentElementString);
+
+		this.innerHTML = myHTML;
+
+	}
+	getValue() {
+
+		return document.getElementById(this.jsc_id).value;
+	}
+	setValue(text) {
+		document.getElementById(this.jsc_id).value = text;
+	}
+
+	get text() {
+		return document.getElementById(this.jsc_id).value;
+
+	}
+	set text(value) 
+	{
+		document.getElementById(this.jsc_id).value = value;
+	}
+	
+
+
+}
+customElements.define('text-box', class_TextBox);
+
+
+class class_SideBar extends HTMLElement {
+	connectedCallback() 
+	{
+		var myHTML = `
+			<style>
+
+				.jsc_id_button_div {
+					width: var(--side-bar-closed-width);
+					position: absolute;
+					top: 0;
+					left: 0px;
+					margin: 0px;
+					padding: 0px;
+					height: var(--title-bar-height);
+				}
+				.jsc_id_openbtn {
+					width: var(--side-bar-closed-width);
+					height: 100%;
+					font-size: var(--h4-text-size);
+					cursor: pointer;
+					background-color: var(--control-bg-color);
+					color: white;
+					border: none;
+					margin: 0px;
+					text-align: left;
+				}
+
+				.jsc_id_openbtn:hover {
+					background-color: var(--control-hover-color);
+				  }
+  
+
+				.jsc_id_sidebar {
+					height: 0%; 
+					width: var(--side-bar-closed-width);
+					position: absolute; 
+					z-index: 1; /* on top */
+					top: 0;
+					left: 0;
+					background-color: var(--control-bg-color);
+					overflow-x: hidden; /* no scroll */
+					overflow: hidden;
+					transition: 0.5s; 
+				}
+				.jsc_id_sidebar a, a:visited {
+					padding: 8px 8px 8px 32px;
+					text-decoration: none;
+					font-size: var(--h4-text-size);
+					color: var(--control-text-color);
+					display: block;
+					transition: 0.3s;
+				}
+
+				.jsc_id_sidebar a:hover {
+					background-color: var(--control-hover-color);
+				}
+  
+
+				.jsc_id_closebtn  {
+					text-align: right;
+
+				}
+
+
+
+				/* smaller screens */
+				@media screen and (max-height: 450px) {
+				  .jsc_id_sidebar {padding-top: 15px;}
+				  .jsc_id_sidebar a {font-size: 18px;}
+				}
+			</style>
+			<div class="jsc_id_button_div">
+				<button id="jsc_id_openbtn" class="jsc_id_openbtn" onclick="jsc_parent.open()"><i class="fas fa-bars"></i></button>
+			</div>
+			<div id="jsc_id" class="jsc_id_sidebar">
+			</div>
+		`;		
+
+		this.jsc_id = jsc_AddObject();
+		
+		// update the id of the div in the control
+		myHTML =  myHTML.replace(/jsc_id/g,this.jsc_id);
+
+		// update any function calls back to this
+		var parentElementString = "document.getElementById('" + this.getAttribute('id') + "')";
+		myHTML =  myHTML.replace(/jsc_parent/g,parentElementString);
+		this.innerHTML = myHTML;
+
+		/////////////////////////////////
+		// Place text in button
+		this.myText = '';
+		if(this.hasAttribute('mytext'))
+		{
+			this.myText = this.getAttribute('mytext');
+			document.getElementById(this.jsc_id+ "_openbtn").innerHTML = this.myText;
+
+		}
+
+
+
+		////////////////////////////////////
+		// Update HTML with Menu Items
+		myHTML = document.getElementById(this.jsc_id).innerHTML;
+		myHTML = `<a href="javascript:void(0)" class="jsc_id_closebtn" onclick="jsc_parent.close()">&times;</a>`;
+		myHTML =  myHTML.replace(/jsc_parent/g,parentElementString);
+		myHTML =  myHTML.replace(/jsc_id/g,this.jsc_id);
+		this.myMenuItems = '';
+		
+		var closefunc = "document.getElementById('" + this.getAttribute('id') + "').close()";
+
+		if(this.hasAttribute('items'))
+		{
+			this.myMenuItems = window[this.getAttribute('items')];
+			
+			for(var outer=0;outer<this.myMenuItems.length;outer++) {
+				var text = this.myMenuItems[outer][0];
+				var css = this.myMenuItems[outer][1];
+				var func = this.myMenuItems[outer][2];
+				myHTML=myHTML +  `<a href="#" class="` + css + `" onclick="` + func + `; ` + closefunc + `;"> ` + text + `</a>`;  
+			}
+		}
+		
+		document.getElementById(this.jsc_id).innerHTML=myHTML;
+		
+
+
+	}
+	open() {
+		document.getElementById(this.jsc_id).style.height = "100%";
+		document.getElementById(this.jsc_id).style.width = "var(--side-bar-open-width)";
+		var divsToHide = document.getElementsByClassName("jsc_viewport"); 
+		for(var i = 0; i < divsToHide.length; i++){
+		   var el = divsToHide[i];
+		   el.style.marginLeft = "250px";
+		}
+	  
+	}
+	close() {
+		document.getElementById(this.jsc_id).style.height = "0";
+		document.getElementById(this.jsc_id).style.width = "var(-side-bar-closed-width)";
+		var divsToHide = document.getElementsByClassName("jsc_viewport"); 
+		for(var i = 0; i < divsToHide.length; i++){
+		   var el = divsToHide[i];
+		   el.style.marginLeft = "0px";
+		}
+
+	}
+
+}
+customElements.define('side-bar', class_SideBar);
+
+
+class class_TitleBar extends HTMLElement {
+	connectedCallback() 
+	{
+		var myHTML = `
+			<style>
+
+				.jsc_id_div {
+					width: 100%;
+					position: absolute;
+					top: 0;
+					left: var(--side-bar-closed-width);
+					margin: 0px;
+
+					font-size: var(--h4-text-size);
+					height: var(--title-bar-height);
+					background-color: var(--control-bg-color);
+					color: var(--control-text-color);
+					
+
+
+				}
+
+
+			</style>
+			<div class="jsc_id_div">jsc_text</div>
+		`;		
+
+		this.jsc_id = jsc_AddObject();
+		this.text = this.innerHTML;
+		// update the id of the div in the control
+		myHTML =  myHTML.replace(/jsc_id/g,this.jsc_id);
+		//myHTML =  myHTML.replace(/jsc_text/g,this.text);
+
+		// update any function calls back to this
+		var parentElementString = "document.getElementById('" + this.getAttribute('id') + "')";
+		myHTML =  myHTML.replace(/jsc_parent/g,parentElementString);
+
+		this.innerHTML = myHTML;
+
+		document.getElementById(this.getAttribute('id')).style.padding='20px;'
+		document.getElementById(this.getAttribute('id')).style.margin='0px;'
+		document.getElementById(this.getAttribute('id')).style.display='';
+		
+
+
+	}
+	
+
+}
+customElements.define('title-bar', class_TitleBar);
+
                 </script>
                 
 		<script>
